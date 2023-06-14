@@ -5,6 +5,7 @@ use App\Http\Controllers\api\ClienteController;
 use App\Http\Controllers\api\ReservaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\PassportAuthController;
+use App\Http\Controller\Api\HotelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,9 +35,6 @@ Route::middleware('localization')->group(function ( ) {
 });
 
 
-
-
-
 // Route::post('login', [AuthController::class, 'login']);
 
 // Route::group(['middleware' => ['auth:api', 'api.version:v1']], function () {
@@ -48,3 +46,5 @@ Route::middleware('localization')->group(function ( ) {
 //     // Route::post('logout', [AuthController::class, 'logout']);
 //     // Route::post('refresh', [AuthController::class, 'refresh']);
 // });
+//rotas CRUD Hotel
+route::apiResource('hotel', HotelController::class);
