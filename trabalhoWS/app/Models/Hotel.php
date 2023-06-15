@@ -9,7 +9,7 @@ class Hotel extends Model
 {
     use HasFactory;
 
-    protected $table = 'HOTEL';
+    protected $table = 'hoteis';
     protected $primaryKey = 'idHotel';
     protected $fillable = ['nomeHotel', 'enderecoHotel', 'telefoneHotel', 'estrelasHotel', 'precoDiaria'];
     public $incrementing = true;
