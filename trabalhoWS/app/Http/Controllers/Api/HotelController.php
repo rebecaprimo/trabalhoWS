@@ -8,6 +8,8 @@ use App\Http\Resources\Api\HotelResource;
 use App\Http\Requests\StoreHotelRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class HotelController extends Controller
 {
@@ -132,9 +134,49 @@ class HotelController extends Controller
      * @param  \App\Models\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show($idHotel)
     {
-        //
+        try {
+            $validator = Validator::make(['idHotel' => $idHotel], [
+                'idHotel' => 'integer'
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages(['idHotel' => 'O campo Id deve ser numérico']);
+            }
+
+            $hotel = Hotel::findOrFail($idHotel);
+            return response()->json([
+                'status' => 200,
+                'mensagem' => 'Hotel retornado.',
+                'hotel' => new HotelResource($hotel)
+            ]);
+        } catch(\Exception $ex) {
+            $class = get_class($ex);
+            switch($class) {
+                case ModelNotFoundException::class:
+                return response()-> json([
+                    'status' => 404,
+                    'mensagem' => 'Hotel não encontrado',
+                    'hotel' => []
+                ], 404);
+                break;
+                case \Illuminate\Validation\ValidationException::class:
+                return response()-> json([
+                    'status' => 406,
+                    'mensagem' => $ex->getMessage(),
+                    'hotel' => []
+                ], 406);
+                break;
+                default:
+                return response() -> json([
+                    'status' => 500,
+                    'mensagem' => 'Erro interno',
+                    'hotel' => []
+                    ], 500);
+                break;
+            }
+        }
     }
 
     /**
@@ -143,7 +185,7 @@ class HotelController extends Controller
      * @param  \App\Models\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
-    public function edit(Hotel $hotel)
+    public function edit (Hotel $hotel)
     {
         //
     }
