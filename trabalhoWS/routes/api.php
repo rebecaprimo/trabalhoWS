@@ -15,9 +15,11 @@ use App\Http\Controllers\Api\HotelController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware("localization")->group(function () {
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
+    
+    //rotas CRUD Hotel
+    route::apiResource('hotel', HotelController::class);
 });
-
-//rotas CRUD Hotel
-route::apiResource('hotel', HotelController::class);
