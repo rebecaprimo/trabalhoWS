@@ -21,7 +21,7 @@ class HotelController extends Controller
     public function index(Request $request)
     {
         $hotel = Hotel::query();
-        $mensagem = "Lista de hotéis retornada";
+        $mensagem = __("hotel.listreturn");
         $codigoderetorno = 0;
     
         $filterParameter = $request->input("filtro");
@@ -81,7 +81,7 @@ class HotelController extends Controller
             $hotels = $hotel->get();
             $response = response()->json([
                 'status' => 200,
-                'mensagem' => $mensagem,
+                'mensagem' =>  __("hotel.listreturn"),
                 'hoteis' => HotelResource::collection($hotels)
             ], 200);
         } else {
@@ -123,7 +123,7 @@ class HotelController extends Controller
 
         return response () -> json([
             'status' => 200,
-            'mensagem' => 'Hotel criado',
+            'mensagem' => __("hotel.created"),
             'hotel' => new HotelResource($hotel)
         ], 200);
     }
@@ -148,7 +148,7 @@ class HotelController extends Controller
             $hotel = Hotel::findOrFail($idHotel);
             return response()->json([
                 'status' => 200,
-                'mensagem' => 'Hotel retornado.',
+                'mensagem' => __("hotel.returned"),
                 'hotel' => new HotelResource($hotel)
             ]);
         } catch(\Exception $ex) {
@@ -209,7 +209,7 @@ class HotelController extends Controller
 
         return response () -> json([
             'status' => 200,
-            'mensagem' => 'Hotel atualizado'
+            'mensagem' => __("hotel.updated")
         ], 200);
     }
 
@@ -224,7 +224,7 @@ class HotelController extends Controller
         $hotel->delete();
         return response() -> json([
             'status' => 200,
-            'mensagem' => 'Hotel apagado'
+            'mensagem' => __("hotel.deleted")
         ], 200);
     }
 }

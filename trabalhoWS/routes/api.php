@@ -33,18 +33,3 @@ Route::middleware('localization')->group(function ( ) {
     route::apiResource('clientes', ClienteController::class)->middleware('auth:api');
     // route::get('clientes', [ClienteController::class, 'index'])->middleware('auth:api');
 });
-
-
-// Route::post('login', [AuthController::class, 'login']);
-
-// Route::group(['middleware' => ['auth:api', 'api.version:v1']], function () {
-//     Route::get('clientes', [ClienteController::class, 'index']);
-//     Route::get('clientes/{id}', [ClienteController::class, 'show']);
-//     Route::post('clientes', [ClienteController::class, 'store']);
-//     Route::put('clientes/{id}', [ClienteController::class, 'update']);
-//     Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
-//     // Route::post('logout', [AuthController::class, 'logout']);
-//     // Route::post('refresh', [AuthController::class, 'refresh']);
-// });
-//rotas CRUD Hotel
-route::apiResource('hotel', HotelController::class);
