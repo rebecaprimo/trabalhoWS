@@ -18,8 +18,9 @@ class HotelResource extends JsonResource
             'idHotel' => $this->idHotel,
             'nomeHotel' => $this->nomeHotel,
             'enderecoHotel' => $this->enderecoHotel,
+            'telefoneHotel' => $this->telefoneHotel,
             'estrelasHotel' => $this->estrelasHotel,
-            'precoDiaria' => $this->idHotel
+            'precoDiaria' => $this->precoDiaria
         ];
     }
 }
