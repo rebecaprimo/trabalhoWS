@@ -18,6 +18,20 @@ class HotelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     /**
+* @OA\Get (
+*   path="/api/hotel",
+*   operationId="getHotelList",
+*   tags={"Hotel"),
+*   summary= "Retorna a lista de Hotéis",
+*   description="Retorna o JSON da lista de Hotéis",
+*   @OA\Response(
+*       response=200,
+*       description="Operação executada com sucesso"
+*       )
+*   )
+*/
     public function index(Request $request)
     {
         $hotel = Hotel::query();
@@ -111,6 +125,25 @@ class HotelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @OA\Post (
+    * path="/api/hotel",
+    * operationId="storeHotel",
+    * tags={"Hotel"},
+    * summary="Cria uma novo Hotel",
+    * description="Retorna o JSON com os dados da novo Hotel",
+    * @OA\RequestBody(
+    *       required=true,
+    *       @OA\Jsoncontent(ref="#/components/schemas/StoreHotelRequest")
+    *   ),
+    *   @OA\Response(
+    *       response=200, 
+    *       description="Operação executada com sucesso",
+    *       @OA\JsonContent(ref="#/components/schemas/Hotel")
+    *       )
+    *   )
+    */
     public function store(Request $request)
     {
         $hotel = new Hotel;
@@ -134,6 +167,29 @@ class HotelController extends Controller
      * @param  \App\Models\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    * @OA\Get(
+    *   path="/api/hotel/{id}",
+    *   operationId="getHotelById",
+    *   tags={"Hotel"},
+    *   summary="Retorna a informação de um hotel",
+    *   description="Retorna o JSON da Categoria requisitada",
+    *   @OA\Parameter(
+    *       name="id",
+    *       description="Id do Hotel",
+    *       required=true,
+    *       in="path",
+    *       @OA\Schema(
+    *           type="integer"
+    *       )
+    *    ),
+    *    @OA\Response(
+    *       response=200,
+    *       description="Operação executada com sucesso"
+    *       )
+    *   )
+    */
     public function show($idHotel)
     {
         try {
@@ -197,6 +253,33 @@ class HotelController extends Controller
      * @param  \App\Models\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    *   @OA\Patch(
+    *   path="/api/hotel/{id}", 
+    *   operationId="updateHotel", 
+    *   tags={"Hotel"},
+    *   summary="Atualiza um Hotel existente",
+    *   description="Retorna o JSON do Hotel atualizado",
+    *   @OA\Parameter(
+    *       name="id",
+    *       description="Id do Hotel", 
+    *       required=true, 
+    *       in="path",
+    *       @OA\Schema(
+    *           type="integer"
+    *       )
+    *   ),
+    *   @OA\RequestBody(
+    *       required=true, 
+    *       @OA\JsonContent(ref="#/components/schemas/StoreHotelRequest")
+    *   ),
+    *   @OA\Response(
+    *       response=200,
+    *       description="Operação executada com sucesso"
+    *   )
+    *)
+    */
     public function update (StoreHotelRequest $request, Hotel $hotel)
     {
         $hotel = Hotel::find($hotel->idHotel);
@@ -219,6 +302,30 @@ class HotelController extends Controller
      * @param  \App\Models\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
+
+    /**
+    *   @OA\Delete(
+    *   path="/api/hotel/{id}",
+    *   operationId="deleteHotel",
+    *   tags={"Hotel"},
+    *   summary="Apaga um Hotel existente",
+    *   description="Apaga um Hotel existente e não há retorno de dados",
+    *   @OA\Parameter(
+    *       name="id",
+    *       description="Id do Hotel",
+    *       required=true,
+    *       in="path",
+    *       @OA\Schema(
+    *           type="integer"
+    *       )
+    *   ),
+    *   @OA\Response(
+    *       response=200, 
+    *       description="Operação executada com sucesso",
+    *       @OA\JsonContent()
+    *   )
+    * )
+    */
     public function destroy(Hotel $hotel)
     {
         $hotel->delete();
