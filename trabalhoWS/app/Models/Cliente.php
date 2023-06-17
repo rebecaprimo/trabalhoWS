@@ -13,5 +13,8 @@ class Cliente extends Model
         'telefoneCliente',
         'cpfCliente',
     ];
+
+    public $timestamps = false;
+
 }
 /*  */
