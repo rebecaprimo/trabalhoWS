@@ -17,19 +17,21 @@ use App\Http\Controller\Api\HotelController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login']);
 Route::post('logout', [PassportAuthController::class, 'logout'])->middleware('auth:api');
 Route::post('user', [PassportAuthController::class, 'clienteInfo'])->middleware('auth:api');
 
-Route::middleware('localization')->group(function ( ) {
-    // Route::middleware('auth:api')->get('/user', function(Request $request) {
-    //     return $request->user( );
-    // });
+Route::middleware('localization')->group(function () {
 
-    // route::apiResource('clientes', ClienteController::class);
-    route::apiResource('reservas', ReservaController::class);
+    //rotas CRUD Hotel
+    route::apiResource('hotel', HotelController::class);
+    Route::get('/hoteis/{idHotel}/reservas', [ReservaController::class, 'index']);
+    Route::post('/hoteis/{idHotel}/reservas', [ReservaController::class, 'store']);
+    Route::get('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'show']);
+    Route::put('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'update']);
+    Route::delete('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'destroy']);
 
     route::apiResource('clientes', ClienteController::class)->middleware('auth:api');
-    // route::get('clientes', [ClienteController::class, 'index'])->middleware('auth:api');
 });
