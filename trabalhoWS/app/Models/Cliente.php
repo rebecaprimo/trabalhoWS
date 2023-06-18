@@ -12,6 +12,7 @@ class Cliente extends Model
         'emailCliente',
         'telefoneCliente',
         'cpfCliente',
+        'senha'
     ];
 
     public $timestamps = false;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Cliente;
 
 
 class ApiPassportAuthController extends Controller
@@ -15,13 +15,17 @@ class ApiPassportAuthController extends Controller
         $this->validate($request, [
             'name' => 'required|min:4',
             'email' => 'required|email',
+            'telefone' => 'required|min:8',
+            'cpf' => 'required|min:11',
             'password' => 'required|min:8',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
+        $user = Cliente::create([
+            'nomeCliente' => $request->name,
+            'emailCliente' => $request->email,
+            'telefoneCliente' => $request->telefone,
+            'cpfCliente' => $request->cpf,
+            'senha' => bcrypt($request->password)
         ]);
 
         $token = $user->createToken('Laravel-9-Passport-Auth')->accessToken;
