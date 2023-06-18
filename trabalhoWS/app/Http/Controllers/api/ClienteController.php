@@ -7,6 +7,7 @@ use App\Http\Resources\ClienteResource;
 use App\Http\Requests\StoreClienteRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -17,7 +18,7 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
-        $cliente = Cliente::query();
+        $cliente = User::query();
         $mensagem = __("cliente.listreturn");
         $codigoderetorno = 0;
 
@@ -69,7 +70,7 @@ class ClienteController extends Controller
             $perPage = 10;
             $cliente->offset(($page - 1) * $perPage)->limit($perPage);
 
-            $recordsTotal = Cliente::count();
+            $recordsTotal = User::count();
             $numberofPages = ceil($recordsTotal / $perPage);
             $mensagem = $mensagem . "+Paginada";
         }
@@ -107,7 +108,7 @@ class ClienteController extends Controller
                 throw ValidationException::withMessages(['id' => 'O campo Id deve ser numério']);
             }
 
-            $cliente = Cliente::findorfail($idcliente);
+            $cliente = User::findorfail($idcliente);
 
             return response()->json([
                 'status' => 200,
@@ -142,7 +143,7 @@ class ClienteController extends Controller
         }
     }
 
-    public function update(StoreClienteRequest $request, Cliente $cliente)
+    public function update(StoreClienteRequest $request, User $cliente)
     {
         $this->validate($request, [
             'name' => 'required|min:4',
@@ -151,7 +152,7 @@ class ClienteController extends Controller
             'cpf' => 'required|min:11',
         ]);
 
-        $cliente = Cliente::find($cliente->idCliente);
+        $cliente = User::find($cliente->idCliente);
 
         if (!$cliente) {
             return response()->json(['message' => 'Cliente não encontrado'], 404);
@@ -170,9 +171,9 @@ class ClienteController extends Controller
         ], 200);
     }
 
-    public function destroy(Cliente $cliente)
+    public function destroy(User $cliente)
     {
-        $cliente = Cliente::find($cliente->idCliente);
+        $cliente = User::find($cliente->idCliente);
 
         if (!$cliente) {
             return response()->json(['message' => 'Cliente não encontrado'], 404);

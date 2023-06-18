@@ -16,8 +16,8 @@ use App\Http\Controllers\api\ApiPassportAuthController;
 |
 */
 
-Route::post('clientes/register', [ApiPassportAuthController::class, 'register']);
-Route::post('clientes/login', [ApiPassportAuthController::class, 'login']);
+Route::post('register', [ApiPassportAuthController::class, 'register']);
+Route::post('login', [ApiPassportAuthController::class, 'login']);
 Route::post('logout', [ApiPassportAuthController::class, 'logout'])->middleware('auth:api');
 Route::post('user', [ApiPassportAuthController::class, 'register'])->middleware('auth:api');
 
