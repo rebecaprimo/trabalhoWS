@@ -5,20 +5,91 @@ namespace App\Http\Controllers;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use App\Http\Resources\Api\ReservaResource;
+use Illuminate\Validation\ValidationException;
 
 class ReservaController extends Controller
 {
 
-    public function index($idHotel)
+    public function index($idHotel, Request $request)
     {
         try {
-            $reservas = Reserva::where('idHotel', $idHotel)->get();
 
-            return response()->json([
-                'status' => 200,
-                'mensagem' => 'Lista de reservas retornada',
-                'reservas' => $reservas
-            ], 200);
+            $reservas = Reserva::where('idHotel', $idHotel);
+            $mensagem = __("reserva.listreturn");
+            $codigoderetorno = 200;
+
+            $filterParameter = $request->input("filtro");
+            if ($filterParameter == null) {
+                $mensagem = $mensagem;
+                $codigoderetorno = 200;
+            } else {
+                [$filterCriteria, $filterValue] = explode(":", $filterParameter);
+
+                if ($filterCriteria == "idReserva") {
+                    $reservas = $reservas->where("idReserva", "=", $filterValue);
+                    $mensagem = $mensagem ."Filtrada";
+                    $codigoderetorno = 200;
+                } else {
+                    $reservas = [];
+                    $mensagem = "Filtro não aceito";
+                    $codigoderetorno = 406;
+                }
+            }
+
+            if ($codigoderetorno == 200) {
+                if ($request->has('ordenacao')) {
+                    $sorts = explode(',', $request->input('ordenacao'));
+
+                    foreach ($sorts as $sortColumn) {
+                        $sortDirection = Str::startsWith($sortColumn, '-') ? 'desc' : 'asc';
+                        $sortColumn = ltrim($sortColumn, '-');
+
+                        switch ($sortColumn) {
+                            case "idReserva":
+                                $reservas = $reservas->orderBy('idReserva', $sortDirection);
+                                break;
+                            case "idCliente":
+                                $reservas = $reservas->orderBy('idCliente', $sortDirection);
+                                break;
+                            case "idHotel":
+                                $reservas = $reservas->orderBy('idHotel', $sortDirection);
+                                break;
+                        }
+                    }
+                    $mensagem = $mensagem . "+Ordenada";
+                }
+            }
+
+
+            $input = $request->input('pagina');
+            if ($input) {
+                $page = $input;
+                $perPage = 10;
+                $reservas->offset(($page - 1) * $perPage)->limit($perPage);
+
+                $recordsTotal = Reserva::count();
+                $numberofPages = ceil($recordsTotal / $perPage);
+                $mensagem = $mensagem . "+Paginada";
+            }
+
+            if ($codigoderetorno == 200) {
+                $reservas = $reservas->get();
+                $response = response()->json([
+                    'status' => 200,
+                    'mensagem' =>  $mensagem,
+                    'hoteis' => ReservaResource::collection($reservas)
+                ], 200);
+            } else {
+                $response = response()->json([
+                    'status' => 406,
+                    'mensagem' => $mensagem,
+                    'reservas' => $reservas
+                ], 406);
+            }
+
+            return $response;
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao recuperar as reservas'], 500);
         }
@@ -48,7 +119,7 @@ class ReservaController extends Controller
 
             return response()->json([
                 'status' => 201,
-                'mensagem' => 'Reserva efetuada com sucesso',
+                'mensagem' => __("reserva.created"),
                 'reservas' => $reserva
             ], 201);
         } catch (\Exception $e) {
@@ -59,11 +130,18 @@ class ReservaController extends Controller
     public function show($idHotel, $idReserva)
     {
         try {
+            $validator = Validator::make(['idHotel' => $idHotel], [
+                'idHotel' => 'integer'
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages(['idHotel' => 'O campo Id deve ser numérico']);
+            }
             $reserva = Reserva::where('idHotel', $idHotel)->findOrFail($idReserva);
 
             return response()->json([
                 'status' => 200,
-                'mensagem' => 'Dados da reserva',
+                'mensagem' => __("reserva.returned"),
                 'reservas' => $reserva
             ], 200);
         } catch (\Exception $e) {
@@ -91,7 +169,7 @@ class ReservaController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'mensagem' => 'Reserva atualizada com sucesso',
+                'mensagem' => __("reserva.updated"),
                 'reservas' => $reserva
             ], 200);
         } catch (\Exception $e) {
@@ -104,8 +182,11 @@ class ReservaController extends Controller
         try {
             $reserva = Reserva::where('idHotel', $idHotel)->findOrFail($idReserva);
             $reserva->delete();
-    
-            return response()->json(null, 204);
+
+            return response() -> json([
+                'status' => 200,
+                'mensagem' => __("reserva.deleted")
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao excluir a reserva'], 500);
         }
