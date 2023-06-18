@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+
 use App\Models\Cliente;
 use App\Http\Resources\ClienteResource;
 use App\Http\Requests\StoreClienteRequest;
@@ -17,105 +18,7 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
-        /**
-         * $query = Reservas::with('cliente', 'hoteis');
-         * $mensagem = "Lista de reservas retornada";
-         * $codigoretorno = 0;
-         *
-         * //OBTEM PARAMETRO DO FILTRO
-         * $filterParameter = $request -> input("filtro");
-         *
-         * //$f nao ha um parametro;
-         * if($filterParameter == null) {
-         *      //Retorna todos as reservas & Default
-         *      $mensagem = "Lista de reservas retornada - Completa";
-         *      $codigoretorno = 200;
-         * } else {
-         *      //Obtem o nome do filtro e o criteiro
-         *      [$filterCriteria, $filterValue] = explode(":", $filterParameter);
-         *
-         *      //Se o filtro está adequado
-         *      if($filterCriteria == "nomeCliente") {
-         *          //Faz inner join para obter o Cliente
-         *          $reservas = $query->join("clientes", "idCliente", "=", "idCliente")
-         *                                        ->where("nomeCliente", "=", $filterValue);
-         *          $mensagem = "Lista de reservas retornada - Filtrada";
-         *          $codigoderetorno = 200;
-         *      } else {
-         *          //Usuario chamou um filtro que não existe, então nao ha nada a retornadar (Error 406 - No Accepted)
-         * '        $produtos = [ ];
-         *          $mensagem = "Filtro nao aceito";
-         *          $codigoretorno = 406;
-         *      }
-         * }
-         *
-         * if($codigoretorno == 200) {
-         *      //Retorno o processamento da ordenacao
-         *
-         *      //se há input para ornedacao
-         *
-         *      if($request->input('ordenacao'), ' ')) {
-         *          $sorts = explode (' , ' $request->input('ordenacao', ' '));
-         *          foreach($sorts as $sortColumn) {
-         *              $sortDirection = Str::startsWith($sortColumn, ' - ')? 'desc' : 'asc';
-         *              $sortColumn = ltrim($sortColumn, ' - ');
-         *
-         *
-         *              //Transforma os nomes dos parametros em nomes dos campos de Modelo
-         *              switch($sortColumn) {
-         *                   case("dataInicio");
-         *                      $query->orderBy('dataInicio', $sortDirection);
-         *                      break;
-         *                  case("dataFim");
-         *                      $query->orderBy('dataFim', $sortDirection);
-         *                      break;
-         *                  case("numHospedes");
-         *                      $query->orderBy('numHospedes', $sortDirection);
-         *                      break;
-         *
-         *                  }
-         *              }
-         *              $mensagem = $mensagem . "+Ordenada";
-         *          }
-         *      }
-         * }
-         *
-         * $input = $request->input('pagina');
-         * if($input) {
-         *      $page = $input;
-         *      $perPage = 10; //Registros por pagina
-         *      $query->offset(($page-1) * $perPage)->limit($perPage);
-         *      $reservas = $query->get( );
-         *
-         *      $recordsTotal = Produto::count( );
-         *      $numberOfPages = ceil($recordsTotal / $perPage);
-         *
-         *      $mensagem = $mensagem . "+Paginada";
-         * }
-         *
-         * //Processamento foi ok, reotrna com base no criterio
-         * if($codigoretorno == 200) {
-         *      $reservas = $query->get( );
-         *      $response = response( ) -> json([
-         *          'status' => 200,
-         *          'mensagem' => $mensagem,
-         *          'reservas' => ReservaResource::collection($reservas)
-         *      ], 200);
-         *
-         *
-         * } else {
-         *      //Retorna o erro que ocorreu
-         *      $response = response()->json([
-         *         'status' => 406,
-         *         'mensagem' => $mensagem,
-         *         'prodtuos' => $produtos
-         *      ], 406);
-         * }
-         *
-         * return $response;
-         *
-         *
-         */
+
 
         $sortParameter = $request->input('ordenacao', 'nomeCliente');
         $sortDirection = Str::startsWith($sortParameter, '-') ? 'desc' : 'asc';
@@ -246,14 +149,18 @@ class ClienteController extends Controller
 
         $cliente->update();
 
+        if (!$cliente) {
+            return response()->json(['message' => 'Cliente não encontrado'], 404);
+        }
+
         return response() -> json([
             'status' => 200,
             'mensagem' => __("cliente.updated"),
         ], 200);
 
-        // if (!$cliente) {
-        //     return response()->json(['message' => 'Cliente não encontrado'], 404);
-        // }
+        if (!$cliente) {
+            return response()->json(['message' => 'Cliente não encontrado'], 404);
+        }
 
         // $request->validate([
         //     'nomeCliente' => 'required',

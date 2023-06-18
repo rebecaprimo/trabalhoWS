@@ -2,6 +2,7 @@
 
 // use App\Http\Controllers\AuthController;
 use App\Http\Controllers\api\ClienteController;
+use App\Http\Controllers\api\ReservaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\ApiPassportAuthController;
 
@@ -15,17 +16,20 @@ use App\Http\Controllers\api\ApiPassportAuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('register', [ApiPassportAuthController::class, 'register']);
-Route::post('login', [ApiPassportAuthController::class, 'login']);
-Route::post('logout', [ApiPassportAuthController::class, 'logout'])->middleware('auth:api');
-Route::post('user', [ApiPassportAuthController::class, 'register'])->middleware('auth:api');
+// Route::post('register', [ApiPassportAuthController::class, 'register']);
+// Route::post('login', [ApiPassportAuthController::class, 'login']);
+// Route::post('logout', [ApiPassportAuthController::class, 'logout'])->middleware('auth:api');
+// Route::post('user', [ApiPassportAuthController::class, 'register'])->middleware('auth:api');
 
 Route::middleware("localization")->group(function ( ) {
     // Route::middleware('auth:sanctum')->get('/user', function(Request $request) {
     //     return $request->user( );
     // });
 
-    route::apiResource('clientes', ClienteController::class)->middleware('auth:api');
+    route::apiResource('clientes', ClienteController::class);
+    route::apiResource('reservas', ReservaController::class);
+
+    // route::apiResource('clientes', ClienteController::class)->middleware('auth:api');
 });
 
 
