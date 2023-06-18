@@ -28,8 +28,8 @@ class ClienteController extends Controller
         } else {
             [$filterCriteria, $filterValue] = explode(":", $filterParameter);
 
-            if ($filterCriteria == "nomeCliente") {
-                $cliente = $cliente->where("nomeCliente", "=", $filterValue);
+            if ($filterCriteria == "idCliente") {
+                $cliente = $cliente->where("idCliente", "=", $filterValue);
                 $mensagem = $mensagem . "+Filtrada";
                 $codigoderetorno = 200;
             } else {
