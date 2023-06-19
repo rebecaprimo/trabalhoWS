@@ -20,7 +20,7 @@ class Reserva extends Model
     ];
     
     public $timestamps = false;
-    protected $primaryKey = 'idCliente';
+    protected $primaryKey = 'idReserva';
 
     public function cliente()
     {

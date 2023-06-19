@@ -16,11 +16,11 @@ Route::middleware('localization')->group(function () {
 
     //rotas CRUD Hotel
     route::apiResource('hoteis', HotelController::class);
-    Route::get('/hoteis/{idHotel}/reservas', [ReservaController::class, 'index']);
-    Route::post('/hoteis/{idHotel}/reservas', [ReservaController::class, 'store']);
-    Route::get('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'show']);
-    Route::put('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'update']);
-    Route::delete('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'destroy']);
+    Route::get('/hoteis/{idHotel}/reservas', [ReservaController::class, 'index'])->middleware('auth:api');
+    Route::post('/hoteis/{idHotel}/reservas', [ReservaController::class, 'store'])->middleware('auth:api');
+    Route::get('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'show'])->middleware('auth:api');
+    Route::put('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'update'])->middleware('auth:api');
+    Route::delete('/hoteis/{idHotel}/reservas/{idReserva}', [ReservaController::class, 'destroy'])->middleware('auth:api');
 
     route::apiResource('clientes', ClienteController::class)->middleware('auth:api');
 });

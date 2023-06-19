@@ -29,7 +29,7 @@ class ReservaController extends Controller
 
                 if ($filterCriteria == "idReserva") {
                     $reservas = $reservas->where("idReserva", "=", $filterValue);
-                    $mensagem = $mensagem ."Filtrada";
+                    $mensagem = $mensagem . "Filtrada";
                     $codigoderetorno = 200;
                 } else {
                     $reservas = [];
@@ -138,7 +138,7 @@ class ReservaController extends Controller
                 throw ValidationException::withMessages(['idHotel' => 'O campo Id deve ser numérico']);
             }
       
-            $reserva = Reserva::where('idHotel', $idHotel)->firstOrFail($idReserva);
+            $reserva = Reserva::findOrFail($idReserva);
 
             return response()->json([
                 'status' => 200,
@@ -184,7 +184,7 @@ class ReservaController extends Controller
             $reserva = Reserva::where('idHotel', $idHotel)->findOrFail($idReserva);
             $reserva->delete();
 
-            return response() -> json([
+            return response()->json([
                 'status' => 200,
                 'mensagem' => __("reserva.deleted")
             ], 200);
