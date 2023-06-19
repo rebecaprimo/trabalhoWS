@@ -20,6 +20,8 @@ class PassportAuthController extends Controller
             'nomeCliente' => 'required',
             'emailCliente' => 'required|email|unique:clientes,emailCliente',
             'senha' => 'required|min:4',
+            'cpfCliente' => 'required|min:11',
+            'telefoneCliente'=> 'required|min:8'
         ]);
 
         if ($validator->fails()) {
@@ -52,25 +54,10 @@ class PassportAuthController extends Controller
             $token = auth()->user()->createToken('Laravel-9-Passport-Auth')->accessToken;
             return response()->json(['token' => $token], 200);
         } else {
-            // $token = auth()->user()->createToken('Laravel-9-Passport-Auth')->accessToken;
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        // $cliente = Auth::user();
-
-
-        // if (!Auth::attempt($data)) {
-        //     return response()->json(['error' => 'Invalid credentials'], 401);
-        // }
-
-        // $token = $cliente->createToken('Laravel-9-Passport-Auth')->accessToken;
-
-
-        // return response()->json(['token' => $token], 200);
-
-
     }
-
 
     public function logout(Request $request)
     {

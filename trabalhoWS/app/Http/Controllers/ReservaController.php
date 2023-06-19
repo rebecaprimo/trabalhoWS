@@ -133,11 +133,12 @@ class ReservaController extends Controller
             $validator = Validator::make(['idHotel' => $idHotel], [
                 'idHotel' => 'integer'
             ]);
-
+            
             if ($validator->fails()) {
                 throw ValidationException::withMessages(['idHotel' => 'O campo Id deve ser numérico']);
             }
-            $reserva = Reserva::where('idHotel', $idHotel)->findOrFail($idReserva);
+      
+            $reserva = Reserva::where('idHotel', $idHotel)->firstOrFail($idReserva);
 
             return response()->json([
                 'status' => 200,

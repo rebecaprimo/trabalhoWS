@@ -326,12 +326,18 @@ class HotelController extends Controller
     *   )
     * )
     */
-    public function destroy(Hotel $hotel)
+    public function destroy($idHotel)
     {
-        $hotel->delete();
-        return response() -> json([
-            'status' => 200,
-            'mensagem' => __("hotel.deleted")
-        ], 200);
+        try {
+            $hotel = Hotel::where('idHotel', $idHotel);
+            $hotel->delete();
+
+            return response() -> json([
+                'status' => 200,
+                'mensagem' => __("hotel.deleted")
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao excluir hotel'], 500);
+        }
     }
 }
