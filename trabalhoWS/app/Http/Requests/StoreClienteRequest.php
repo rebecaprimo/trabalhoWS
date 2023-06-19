@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class StoreClienteRequest extends FormRequest
 {
@@ -28,6 +30,26 @@ class StoreClienteRequest extends FormRequest
             "emailCliente" => "required",
             "telefoneCliente" => "required",
             "cpfCliente" => "required",
+            "senha" => "required",
         ];
+
+
+
     }
+
+     /**Get the validation messages.**/
+     public function messages(): array{
+        return ['required'  => 'há um campo que não foi preenchido.'];
+    }
+
+          public function failedValidation(Validator $validator) {
+          throw new ValidationException(
+              $validator,
+              response()->json([
+                  'status' => 422,
+                  'message' => $validator->errors()
+              ], 422)
+          );
+      }
 }
+

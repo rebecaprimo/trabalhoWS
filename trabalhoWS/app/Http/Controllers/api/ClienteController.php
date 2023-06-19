@@ -120,6 +120,7 @@ class ClienteController extends Controller
         $cliente->emailCliente = $request->emailCliente;
         $cliente->telefoneCliente = $request->telefoneCliente;
         $cliente->cpfCliente = $request->cpfCliente;
+        $cliente->senha = bcrypt($request->senha);
 
         $cliente->save();
 
@@ -144,6 +145,7 @@ class ClienteController extends Controller
         $cliente->emailCliente = $request->emailCliente;
         $cliente->telefoneCliente = $request->telefoneCliente;
         $cliente->cpfCliente = $request->cpfCliente;
+        $cliente->senha = bcrypt($request->senha);
 
 
 
